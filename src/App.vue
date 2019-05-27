@@ -2,21 +2,10 @@
   <div id="app">
     <div class="container with-bottom-nav" style="min-height: 667px;">
       <div class="content">
-        <div class="js-image-swiper custom-image-swiper custom-image-swiper-single" data-images="1">
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swp-page">
-                <a class="js-no-follow" href="https://h5.koudaitong.com/v2/index/rukou">
-                  <img
-                    class="goods-main-photo fadeIn"
-                    src="https://img.yzcdn.cn/upload_files/2016/07/29/Fl3T06Mu7TpIhR4L1s2tzm8cZrgt.jpg"
-                  >
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <a href="https://maijia.youzan.com/mars/notice/detail?id=" class="notice"></a>
+        <!-- <div class="js-image-swiper custom-image-swiper custom-image-swiper-single" data-images="1"> -->
+          <Swipe :lists='bannerLists' v-if="bannerLists"></Swipe>
+        <!-- </div> -->
+        <!-- <a href="https://maijia.youzan.com/mars/notice/detail?id=" class="notice"></a> -->
         <div class="section-title">优店推荐</div>
         <div class="section-content shops">
           <div class="shop-wrap">
@@ -90,24 +79,27 @@
 </template>
 
 <script>
-import url from "@/api/api.js";
+import url from '@/api/api.js'
 import Foot from '@/components/Foot'
+import Swipe from '@/components/Swipe'
 export default {
-  data() {
+  data () {
     return {
       lists: null,
       pageNum: 2,
       pageSize: 6,
       loading: false,
-      allLoading: false
-    };
+      allLoading: false,
+      bannerLists: null
+    }
   },
-  components:{
-   Foot
+  components: {
+    Foot,
+    Swipe
   },
   methods: {
-    getLists() {
-      if(this.allLoading) return
+    getLists () {
+      if (this.allLoading) return
       this.loading = true
       this.$http
         .get(url.hotLists, {
@@ -117,26 +109,32 @@ export default {
         .then(res => {
           let curLists = res.data.lists
           // 判断所有数据是否加载完毕
-          if(curLists.length < this.pageSize){
+          if (curLists.length < this.pageSize) {
             this.allLoading = true
           }
-          if(this.lists){
+          if (this.lists) {
             this.lists = this.lists.concat(curLists)
-          }else{
+          } else {
             this.lists = curLists
           }
           this.loading = false
           this.pageNum++
-        });
+        })
+    },
+    getBanner () {
+      this.$http.get(url.banner).then(res => {
+        this.bannerLists = res.data.lists
+      })
     }
   },
-  beforeMount() {
-    this.getLists();
+  beforeMount () {
+    this.getLists()
+    this.getBanner()
   }
-};
+}
 </script>
 
-<style lang="scss">
+<style>
 @import "./assets/css/common.css";
 @import "./assets/css/index.css";
 </style>

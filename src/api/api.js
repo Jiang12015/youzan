@@ -1,5 +1,9 @@
 let url = {
-  hotLists: '/index/hotLists'
+  hotLists: '/index/hotLists',
+  banner: '/index/banner',
+  topList: '/category/topList',
+  subList: '/category/subList',
+  rank: '/category/rank'
 }
 
 let host = 'https://www.easy-mock.com/mock/5c9c3045d172204b3a07ecb0/youzan'
